@@ -1,6 +1,27 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+import Link from "next/link";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
+
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,7 +48,46 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+        >
+        <NavigationMenu>
+          <NavigationMenuList>
+              <NavigationMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <NavigationMenuTrigger>Post data</NavigationMenuTrigger>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      <NavigationMenuLink href="/">Add challenge</NavigationMenuLink>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <NavigationMenuLink href="/add_category">Add category</NavigationMenuLink>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <NavigationMenuLink href="/add_activity">Add activity</NavigationMenuLink>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <NavigationMenuTrigger>Administration</NavigationMenuTrigger>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <NavigationMenuLink href="/admin/challenges">Challenges</NavigationMenuLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavigationMenuLink href="/option2">Option 2</NavigationMenuLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+        <Toaster position="bottom-center" />
         {children}
       </body>
     </html>
