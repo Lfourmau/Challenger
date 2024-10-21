@@ -1,5 +1,5 @@
 "use client"; 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "../ui/button";
@@ -8,7 +8,40 @@ import { supabaseSport } from "@/lib/supabase_sport";
 import { supabaseGame } from "@/lib/supabase_game";
 import CategorySelect from "../selects/categorySelect";
 import ActivitySelect from "../selects/activitySelect";
+
+
 export default function PostChall() {
+	const authKey = process.env.NEXT_PUBLIC_DEEPL_API_KEY || "";
+	const langagesKeys = ["fr", "en", "it", "es", 'de']
+
+	const translateText = async (text, targetLanguage) => {
+		try {
+			const response = await fetch('https://api-free.deepl.com/v2/translate', {
+			  method: 'POST',
+			  headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			  },
+			  body: new URLSearchParams({
+				auth_key: authKey,
+				text: text,
+				target_lang: targetLanguage,
+			  }),
+			});
+		
+			const result = await response.json();
+		
+			if (response.ok) {
+			  return result.translations[0].text; // Retourne le texte traduit
+			} else {
+			  throw new Error(result.message);
+			}
+		  } catch (error) {
+			console.error("Error calling DeepL API:", error);
+			return null;
+		  }
+	};
+
+
 
 	const [formData, setFormData] = useState({
 		title: "",
@@ -93,7 +126,7 @@ export default function PostChall() {
 				description: formData.description,
 				points: formData.points,
 				difficulty: formData.difficulty,
-				sportId: formData.activity,
+				activityId: formData.activity,
 				categoryId: formData.category,
 				votes_needed: formData.votes_needed,
 				hidden: formData.hidden 
@@ -103,7 +136,24 @@ export default function PostChall() {
 		if (error){
 			toast.error('Niktamer')
 		} else{
+			const challengeId = data[0].id;
 			toast.success('Challenge posted')
+			langagesKeys.forEach(async key => {
+				const translatedTitle = await translateText(formData.title, key)
+				const translatedDescription = await translateText(formData.description, key)
+				const { error: translationError } = await supabaseClient
+				.from('challenges_translations')
+				.insert([{
+					challengeId : challengeId,
+					language_code : key,
+					title : translatedTitle,
+					description : translatedDescription
+				}])
+				if (translationError){
+					toast.error('Error translating in ' + key)
+				}
+			});
+			await translateText("This is a try of traduction feature", "fr")
 		}
 		console.log(formData)
 	  }

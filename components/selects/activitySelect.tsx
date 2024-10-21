@@ -2,11 +2,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabaseSport } from "@/lib/supabase_sport";
 import { supabaseGame } from "@/lib/supabase_game";
 import { useEffect, useState } from "react";
+import { Activity } from "@/app/types/activity";
 
-interface Activity{
-	id :number,
-	name:string,
-}
 
 export default function ActivitySelect({ onActivityChange, disabled, portal }){
 
@@ -18,7 +15,7 @@ export default function ActivitySelect({ onActivityChange, disabled, portal }){
     const fetchActivities = async () => {
       try {
         const { data, error } = await supabaseClient
-          .from("sports")
+          .from("activities")
           .select("*");
 
         if (error) {

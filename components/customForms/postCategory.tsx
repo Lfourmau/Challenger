@@ -49,7 +49,7 @@ export default function PostCategory() {
 
 		const categoriesToInsert = formData.name.split(" ").map((categoryName) => ({
 			name: categoryName,
-			sportId: formData.activity,  // Utiliser le même sportId pour toutes les catégories
+			activityId: formData.activity,  // Utiliser le même activityId pour toutes les catégories
 		  }));
 
 		const { data, error } = await supabaseClient

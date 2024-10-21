@@ -43,7 +43,7 @@ export default function PostActivity() {
 
 
 		const { data, error } = await supabaseClient
-		.from('sports')
+		.from('activities')
 		.insert([
 			{ 
 				name: formData.name,	

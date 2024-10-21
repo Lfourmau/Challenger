@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 interface Category{
 	id:number,
 	name: string,
-	sportId : number,
+	activityId : number,
 }
 
 export default function CategorySelect({ onCategoryChange, disabled, portal, activity }){
 	const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
+	if (!portal || !activity){
+		return ;
+	}
 	const supabaseClient = portal === "Kywo sport" ? supabaseSport : supabaseGame
     // Fonction pour récupérer les catégories depuis Supabase
     const fetchCategories = async () => {
@@ -22,9 +25,9 @@ export default function CategorySelect({ onCategoryChange, disabled, portal, act
 			.select(`
 			id,
 			name,
-			sportId
+			activityId
 			`)
-			.eq("sportId", activity);
+			.eq("activityId", activity);
 
         if (error) {
           console.error("Error fetching categories:", error);
