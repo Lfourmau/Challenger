@@ -8,11 +8,11 @@ import { supabaseSport } from "@/lib/supabase_sport";
 import { supabaseGame } from "@/lib/supabase_game";
 import CategorySelect from "../selects/categorySelect";
 import ActivitySelect from "../selects/activitySelect";
+import langagesKeys from "@/app/langs/langs";
 
 
 export default function PostChall() {
 	const authKey = process.env.NEXT_PUBLIC_DEEPL_API_KEY || "";
-	const langagesKeys = ["fr", "en", "it", "es", 'de']
 
 	const translateText = async (text, targetLanguage) => {
 		try {

@@ -19,11 +19,13 @@ import {
   } from "@/components/ui/table"
 import { EditChallenge } from "../dialogs/editChallenge";
 import { Challenge } from "@/app/types/challenge";
+import langagesKeys from "@/app/langs/langs";
 
 
 
 export default function ListChallenges(){
 	const [challs, setChalls] = useState<Challenge[]>([])
+	const [lang, setLang] = useState("en")
 
 	const [formData, setFormData] = useState({
 		category: "",
@@ -50,6 +52,9 @@ export default function ListChallenges(){
 			portal: newPortal,
 		}));
 	};
+	const handleLanguageChange = (newLang) => {
+		setLang(newLang)
+	};
 
 
 
@@ -63,7 +68,15 @@ export default function ListChallenges(){
 		const supabaseClient = formData.portal === "Kywo sport" ? supabaseSport : supabaseGame
 		// Fonction pour récupérer les catégories depuis Supabase
 		const fetchChalls = async () => {
-		  const {data, error} = await supabaseClient.from("challenges").select("*").eq("activityId", formData.activity).eq("categoryId", formData.category)
+		  const {data, error} = await supabaseClient
+		  .from("challenges_translations")
+		  .select(`
+				*,
+				challenge:challenges!inner(*)
+			`)
+		  .eq("challenge.activityId", formData.activity)
+		  .eq("challenge.categoryId", formData.category)
+		  .eq("language_code", lang)
 		if (error){
 			toast.error("Failed to fetch challs : " + error)
 		} else if (data.length === 0){
@@ -76,7 +89,7 @@ export default function ListChallenges(){
 	
 		// Appel de la fonction pour récupérer les catégories au chargement
 		fetchChalls();
-	  }, [formData.activity, formData.category, formData.portal]);
+	  }, [formData.activity, formData.category, formData.portal, lang]);
 
 
 
@@ -106,6 +119,22 @@ export default function ListChallenges(){
 					<label>Name of the category</label>
 					<CategorySelect onCategoryChange={handleCategoryChange} disabled={!formData.portal || !formData.activity} portal={formData.portal} activity={formData.activity}/>
 				</div>
+
+				<div className="mt-4">
+					<label>Language</label>
+					<Select onValueChange={handleLanguageChange}>
+						<SelectTrigger>
+							<SelectValue placeholder="Select language" />
+						</SelectTrigger>
+						<SelectContent>
+						{
+							langagesKeys.map((key) => (
+								<SelectItem key={key} value={key}>{key}</SelectItem>
+							))
+						}
+						</SelectContent>
+					</Select>
+				</div>
 			</form>
 
 			<Table className="mt-5">
@@ -130,7 +159,7 @@ export default function ListChallenges(){
 							<TableCell>{item.votes_needed}</TableCell>
 							<TableCell>{item.activityId}</TableCell>
 							<TableCell>{item.categoryId}</TableCell>
-							<TableCell>{item.hidden.toString()}</TableCell>
+							{/* <TableCell>{item.hidden.toString()}</TableCell> */}
 							<TableCell>
 								<EditChallenge chall={item} portal={formData.portal}></EditChallenge>
 							</TableCell>
