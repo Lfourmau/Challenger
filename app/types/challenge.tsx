@@ -1,3 +1,5 @@
+import Translation from "./translation";
+
 export interface Challenge{
 	id: number,
 	title: string,
@@ -8,4 +10,5 @@ export interface Challenge{
 	difficulty :string,
 	categoryId :number,
 	hidden :boolean,
+	translation : Translation
 }

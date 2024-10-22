@@ -51,7 +51,7 @@ export default function CategorySelect({ onCategoryChange, disabled, portal, act
 			</SelectTrigger>
 			<SelectContent>
 				{categories.map((category) => (
-				<SelectItem key={category.id} value={category.id.toString()}>
+				<SelectItem key={category.id} value={category.id.toString()} className="cursor-pointer">
 					{category.name}
 				</SelectItem>
 				))}

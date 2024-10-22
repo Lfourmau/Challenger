@@ -67,8 +67,8 @@ export default function PostActivity() {
 					<SelectValue placeholder="Select portal" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="Kywo sport">Kywo sport</SelectItem>
-					<SelectItem value="Kywo e-sport">Kywo e-sport</SelectItem>
+					<SelectItem value="Kywo sport" className="cursor-pointer">Kywo sport</SelectItem>
+					<SelectItem value="Kywo e-sport" className="cursor-pointer">Kywo e-sport</SelectItem>
 				</SelectContent>
 			</Select>
 		</div>

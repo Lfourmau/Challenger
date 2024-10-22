@@ -18,23 +18,43 @@ import {
 	TableRow,
   } from "@/components/ui/table"
 import { EditChallenge } from "../dialogs/editChallenge";
-import { Video } from "@/app/types/video";
-import { EditVideo } from "../dialogs/editVideo";
+import { Challenge } from "@/app/types/challenge";
+import langagesKeys from "@/app/langs/langs";
+import { User } from "@/app/types/user";
 
 
 
-export default function ListVideos(){
-	const [videos, setVideos] = useState<Video[]>([])
+export default function ListUsers(){
+	const [users, setUsers] = useState<User[]>([])
+	const [lang, setLang] = useState("en")
 
 	const [formData, setFormData] = useState({
-		portal : "",
+		category: "",
+		activity: "",
+		portal: "",
 	});
 
+	const handleCategoryChange = (newCategory) => {
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			category: newCategory,
+		}));
+	};
+
+	  const handleActivityChange = (newActivity) => {
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			activity: newActivity,
+		}));
+	};
 	const handlePortalChange = (newPortal) => {
 		setFormData((prevFormData) => ({
 			...prevFormData,
 			portal: newPortal,
 		}));
+	};
+	const handleLanguageChange = (newLang) => {
+		setLang(newLang)
 	};
 
 
@@ -48,30 +68,26 @@ export default function ListVideos(){
 		}
 		const supabaseClient = formData.portal === "Kywo sport" ? supabaseSport : supabaseGame
 		// Fonction pour récupérer les catégories depuis Supabase
-		const fetchVideos = async () => {
-		  const {data, error} = await supabaseClient.from("videos")
+		const fetchUsers = async () => {
+		  const {data, error} = await supabaseClient
+		  .from("users")
 		  .select(`
-			*,
-			challenge:challenges(
 				*
-			),
-			author:users(
-				*
-			)
-		`)
+			`)
+		console.log(data)
 		if (error){
-			toast.error("Failed to fetch videos : " + error)
+			toast.error("Failed to fetch users : " + error)
 		} else if (data.length === 0){
-			toast.error("No video found")
+			toast.error("No user found")
 		} else{
-			setVideos(data)
-			toast.success(data.length + " video(s) fetched !")
+			setUsers(data)
+			toast.success(data.length + " user(s) fetched !")
 		}
 		};
 	
 		// Appel de la fonction pour récupérer les catégories au chargement
-		fetchVideos();
-	  }, [formData.portal]);
+		fetchUsers();
+	  }, [formData.portal, lang]);
 
 
 
@@ -92,33 +108,34 @@ export default function ListVideos(){
 						</SelectContent>
 					</Select>
 				</div>
+
 			</form>
 
 			<Table className="mt-5">
-				<TableCaption>Videos administration</TableCaption>
+				<TableCaption>Users administration</TableCaption>
 				<TableHeader>
 					<TableRow>
-						<TableHead className="w-[20px]">Id</TableHead>
-						<TableHead>Author</TableHead>
-						<TableHead className="">ChallTitle</TableHead>
-						<TableHead className="">Views</TableHead>
-						<TableHead className="">Claps</TableHead>
-						<TableHead className="">Posted</TableHead>
-						<TableHead className="">Status</TableHead>
+						<TableHead>Id</TableHead>
+						<TableHead>Username</TableHead>
+						<TableHead>Country</TableHead>
+						<TableHead>City</TableHead>
+						<TableHead>Followers</TableHead>
+						<TableHead>OnBoarded</TableHead>
+						<TableHead>Email</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{videos.map((item) => (
+					{users.map((item) => (
 						<TableRow key={item.id} className="cursor-pointer">
 							<TableCell className="font-medium">{item.id}</TableCell>
-							<TableCell>{item.author.username}</TableCell>
-							<TableCell>{item.challenge.title}</TableCell>
-							<TableCell>{item.views}</TableCell>
-							<TableCell>{item.claps}</TableCell>
-							<TableCell>{item.posted_at}</TableCell>
-							<TableCell>{item.video_status}</TableCell>
+							<TableCell>{item.username}</TableCell>
+							<TableCell>{item.country}</TableCell>
+							<TableCell>{item.city}</TableCell>
+							<TableCell>{item.followers}</TableCell>
+							<TableCell>{item.onboarded.toString()}</TableCell>
+							<TableCell>{item.email}</TableCell>
 							<TableCell>
-								<EditVideo video={item} portal={formData.portal}></EditVideo>
+								<EditChallenge chall={item} portal={formData.portal}></EditChallenge>
 							</TableCell>
 						</TableRow>
 					))
@@ -128,14 +145,3 @@ export default function ListVideos(){
 		</div>
 	)
 }
-
-// id: number,
-// 	title: string,
-// 	description: string,
-// 	points :number,
-// 	votes_needed :number,
-// 	portal : string,
-// 	activityId :number,
-// 	difficulty :string,
-// 	categoryId :number,
-// 	hidden :boolean,

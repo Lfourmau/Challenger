@@ -41,7 +41,7 @@ export default function ActivitySelect({ onActivityChange, disabled, portal }){
 		</SelectTrigger>
 		<SelectContent>
 				{activities.map((activity) => (
-				<SelectItem key={activity.id} value={activity.id.toString()}>
+				<SelectItem key={activity.id} value={activity.id.toString()} className="cursor-pointer">
 					{activity.name}
 				</SelectItem>
 				))}

@@ -59,7 +59,22 @@ export default function ListChallenges(){
 
 
 
-
+	// challenge:challenges (
+	// 	translation:challenges_translations(
+	// 	  title,
+	// 	  description,
+	// 	  language_code
+	// 	),
+	// 	id,
+	// 	title,
+	// 	description,
+	// 	votes_needed,
+	// 	points,
+	// 	activity:activities (
+	// 	  id,
+	// 	  name
+	// 	)
+	//   ),
 
 	useEffect(() => {
 		if (!formData.activity || !formData.category || !formData.portal){
@@ -69,22 +84,28 @@ export default function ListChallenges(){
 		// Fonction pour récupérer les catégories depuis Supabase
 		const fetchChalls = async () => {
 		  const {data, error} = await supabaseClient
-		  .from("challenges_translations")
+		  .from("challenges")
 		  .select(`
 				*,
-				challenge:challenges!inner(*)
+				translation:challenges_translations(
+					title,
+					description,
+					language_code
+					)
 			`)
-		  .eq("challenge.activityId", formData.activity)
-		  .eq("challenge.categoryId", formData.category)
-		  .eq("language_code", lang)
-		if (error){
-			toast.error("Failed to fetch challs : " + error)
-		} else if (data.length === 0){
-			toast.error("No challenge found")
-		} else{
-			setChalls(data)
-			toast.success(data.length + " challenge(s) fetched !")
-		}
+		.eq("translation.language_code", lang)
+		  .eq("activityId", formData.activity)
+		  .eq("categoryId", formData.category)
+			console.log(data)
+			if (error){
+				console.log(error)
+				toast.error("Failed to fetch challs : " + error)
+			} else if (data.length === 0){
+				toast.error("No challenge found")
+			} else{
+				setChalls(data)
+				toast.success(data.length + " challenge(s) fetched !")
+			}
 		};
 	
 		// Appel de la fonction pour récupérer les catégories au chargement
@@ -105,8 +126,8 @@ export default function ListChallenges(){
 							<SelectValue placeholder="Select portal" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="Kywo sport">Kywo sport</SelectItem>
-							<SelectItem value="Kywo e-sport">Kywo e-sport</SelectItem>
+							<SelectItem value="Kywo sport" className="cursor-pointer">Kywo sport</SelectItem>
+							<SelectItem value="Kywo e-sport" className="cursor-pointer">Kywo e-sport</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>
@@ -124,7 +145,7 @@ export default function ListChallenges(){
 					<label>Language</label>
 					<Select onValueChange={handleLanguageChange}>
 						<SelectTrigger>
-							<SelectValue placeholder="Select language" />
+							<SelectValue placeholder="Select language" defaultValue={"en"} />
 						</SelectTrigger>
 						<SelectContent>
 						{
@@ -138,7 +159,7 @@ export default function ListChallenges(){
 			</form>
 
 			<Table className="mt-5">
-				<TableCaption>Challenges fetched</TableCaption>
+				<TableCaption>Challenges administration</TableCaption>
 				<TableHeader>
 					<TableRow>
 						<TableHead className="w-[20px]">Id</TableHead>
@@ -154,8 +175,8 @@ export default function ListChallenges(){
 					{challs.map((item) => (
 						<TableRow key={item.id} className="cursor-pointer">
 							<TableCell className="font-medium">{item.id}</TableCell>
-							<TableCell>{item.title}</TableCell>
-							<TableCell>{item.description}</TableCell>
+							<TableCell>{item.translation[0].title}</TableCell>
+							<TableCell>{item.translation[0].description}</TableCell>
 							<TableCell>{item.votes_needed}</TableCell>
 							<TableCell>{item.activityId}</TableCell>
 							<TableCell>{item.categoryId}</TableCell>
@@ -171,14 +192,3 @@ export default function ListChallenges(){
 		</div>
 	)
 }
-
-// id: number,
-// 	title: string,
-// 	description: string,
-// 	points :number,
-// 	votes_needed :number,
-// 	portal : string,
-// 	activityId :number,
-// 	difficulty :string,
-// 	categoryId :number,
-// 	hidden :boolean,

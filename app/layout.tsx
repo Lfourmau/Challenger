@@ -82,9 +82,29 @@ export default function RootLayout({
                   <DropdownMenuItem>
                     <NavigationMenuLink href="/admin/videos">Videos</NavigationMenuLink>
                   </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavigationMenuLink href="/admin/users">Users</NavigationMenuLink>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </NavigationMenuItem>
+
+
+              <NavigationMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <NavigationMenuTrigger>Stats</NavigationMenuTrigger>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <NavigationMenuLink href="/stats">Overview</NavigationMenuLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </NavigationMenuItem>
+
+
+
           </NavigationMenuList>
         </NavigationMenu>
         <Toaster position="bottom-center" />
