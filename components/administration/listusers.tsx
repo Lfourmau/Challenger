@@ -21,6 +21,7 @@ import { EditChallenge } from "../dialogs/editChallenge";
 import { Challenge } from "@/app/types/challenge";
 import langagesKeys from "@/app/langs/langs";
 import { User } from "@/app/types/user";
+import { EditUser } from "../dialogs/editUser";
 
 
 
@@ -135,7 +136,7 @@ export default function ListUsers(){
 							<TableCell>{item.onboarded.toString()}</TableCell>
 							<TableCell>{item.email}</TableCell>
 							<TableCell>
-								<EditChallenge chall={item} portal={formData.portal}></EditChallenge>
+								<EditUser user={item} portal={formData.portal}></EditUser>
 							</TableCell>
 						</TableRow>
 					))

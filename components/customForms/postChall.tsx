@@ -226,7 +226,7 @@ export default function PostChall() {
 			</Select>
 		</div>
 
-        <Button onClick={submitForm} className="mt-3 bg-blue-700">Post challenge</Button>
+        <Button onClick={submitForm} className="mt-3">Post challenge</Button>
       </form>
 	)
 }

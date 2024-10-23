@@ -78,7 +78,7 @@ export default function PostActivity() {
           <Input type="text" name="name" onChange={handleInput} value={formData.name} />
         </div>
 
-        <Button onClick={submitForm} className="mt-3 bg-blue-700">Post activity</Button>
+        <Button onClick={submitForm} className="mt-3">Post activity</Button>
       </form>
 	)
 }

@@ -21,6 +21,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 
 const geistSans = localFont({
@@ -47,9 +49,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`} //can add 'dark' in the classname here to pass in darkmode
         >
-        <NavigationMenu>
+        <NavigationMenu className="sticky top-0 z-50">
           <NavigationMenuList>
               <NavigationMenuItem>
                 <DropdownMenu>
@@ -102,8 +104,6 @@ export default function RootLayout({
                 </DropdownMenuContent>
               </DropdownMenu>
             </NavigationMenuItem>
-
-
 
           </NavigationMenuList>
         </NavigationMenu>

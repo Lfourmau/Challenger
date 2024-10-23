@@ -88,7 +88,7 @@ export default function PostCategory() {
           <Input type="text" name="name" onChange={handleInput} value={formData.name} placeholder="Just separate them with a space if you want to add several."/>
         </div>
 
-        <Button onClick={submitForm} className="mt-3 bg-blue-700">Post category</Button>
+        <Button onClick={submitForm} className="mt-3">Post category</Button>
       </form>
 	)
 }
